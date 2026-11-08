@@ -15,11 +15,11 @@ namespace H.W_IPG203
 
     internal abstract class Appliance : IAppliance
     {
-        private int SerialNumber;
-        private string DeviceName;
-        private DateTime DateOfReceipt;
-        private bool MaintenanceStatus;
-        private int MaintenanceCost;
+        public int SerialNumber;
+        public string DeviceName;
+        public DateTime DateOfReceipt;
+        public bool MaintenanceStatus;
+        public int MaintenanceCost;
 
         public abstract int CalculateRepairCost();
 
