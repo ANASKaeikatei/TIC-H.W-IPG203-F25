@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace H.W_IPG203
 {
+    internal delegate void ApplianceStatusChangedHandler(Appliance appliance);
+
     internal interface IAppliance
     {
         bool StartMaintenance();
@@ -15,27 +17,50 @@ namespace H.W_IPG203
 
     internal abstract class Appliance : IAppliance
     {
-        private  readonly string _SerialNumber;
+        private readonly string _SerialNumber;
         private string _DeviceName;
         private DateTime _DateOfReceipt;
         private bool _MaintenanceStatus;
         private int _MaintenanceCost;
 
+        public event ApplianceStatusChangedHandler StatusChanged;
+
         public abstract int CalculateRepairCost();
+
+        protected void ChangeStatus(bool newStatus)
+        {
+            _MaintenanceStatus = newStatus;
+            StatusChanged?.Invoke(this);
+        }
 
         bool IAppliance.CompleteMaintenance()
         {
-          return false;
+            if (!_MaintenanceStatus)
+            {
+                return false;
+            }
+
+            ChangeStatus(false);
+            return true;
         }
 
         void IAppliance.DisplayInfo()
         {
-            
+            Console.WriteLine("Device Name: " + DeviceName);
+            Console.WriteLine("Serial Number: " + SerialNumber);
+            Console.WriteLine("Maintenance Status: " + MaintenanceStatus);
+            Console.WriteLine("Maintenance Cost: " + MaintenanceCost);
         }
 
         bool IAppliance.StartMaintenance()
         {
-            return false;
+            if (_MaintenanceStatus)
+            {
+                return false;
+            }
+
+            ChangeStatus(true);
+            return true;
         }
 
         public string SerialNumber
@@ -46,10 +71,9 @@ namespace H.W_IPG203
         public string DeviceName
         {
             get { return _DeviceName; }
-            
             set
-            { 
-                if ( _DeviceName == null )
+            {
+                if (_DeviceName == null)
                 {
                     _DeviceName = value;
                 }
@@ -59,26 +83,24 @@ namespace H.W_IPG203
         public DateTime DateOfReceipt
         {
             get { return _DateOfReceipt; }
-            private set { _DateOfReceipt = value; } 
+            private set { _DateOfReceipt = value; }
         }
 
         public bool MaintenanceStatus
         {
-             get { return _MaintenanceStatus; }
+            get { return _MaintenanceStatus; }
         }
-       public int MaintenanceCost
-       {
-           get { return _MaintenanceCost; }
-           set
-           {
-               if (value >= 0)
-               {
-                   _MaintenanceCost = value;
-               }
-           }
-       }
 
-
+        public int MaintenanceCost
+        {
+            get { return _MaintenanceCost; }
+            set
+            {
+                if (value >= 0)
+                {
+                    _MaintenanceCost = value;
+                }
+            }
+        }
     }
 }
-
