@@ -8,6 +8,11 @@ namespace H.W_IPG203
 {
     internal class WashingMachine : Appliance
     {
+        public WashingMachine(string SerialNumber, DateTime dateOfReceipt) : base(SerialNumber, dateOfReceipt)
+        {
+            
+        }
+
         public override int CalculateRepairCost()
         {
             return 1;

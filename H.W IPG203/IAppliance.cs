@@ -22,6 +22,28 @@ namespace H.W_IPG203
         private DateTime _DateOfReceipt;
         private bool _MaintenanceStatus;
         private int _MaintenanceCost;
+        private static int _DeicesUnderMaintenance = 0;
+
+        protected Appliance(string SerialNumber, DateTime date)
+        {
+            if (ApplianceValidator.IsValidSerialNumber(SerialNumber))
+            {
+                _SerialNumber = SerialNumber;
+            }
+            else
+            {
+                Console.WriteLine("Invaild serial number");
+            }
+
+            if (ApplianceValidator.IsValidDate(date))
+            {
+                _DateOfReceipt = date;
+            }
+            else
+            {
+                Console.WriteLine("Invaild date");
+            }
+        }
 
         public event ApplianceStatusChangedHandler StatusChanged;
 
@@ -29,8 +51,19 @@ namespace H.W_IPG203
 
         protected void ChangeStatus(bool newStatus)
         {
-            _MaintenanceStatus = newStatus;
-            StatusChanged?.Invoke(this);
+            if(_MaintenanceStatus != newStatus)
+            {
+                if(newStatus == true)
+                {
+                    _DeicesUnderMaintenance++;
+                }
+                else
+                {
+                    _DeicesUnderMaintenance--;
+                }
+                _MaintenanceStatus = newStatus;
+                StatusChanged?.Invoke(this);
+            }
         }
 
         bool IAppliance.CompleteMaintenance()
@@ -101,6 +134,11 @@ namespace H.W_IPG203
                     _MaintenanceCost = value;
                 }
             }
+        }
+
+        public static int DevicesUnderMaintenance
+        {
+            get { return _DeicesUnderMaintenance; }
         }
     }
 }

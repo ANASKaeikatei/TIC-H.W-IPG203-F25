@@ -8,6 +8,11 @@ namespace H.W_IPG203
 {
     internal class Refrigerator : Appliance
     {
+        public Refrigerator(string SerialNumber, DateTime dateOfReceipt) :base(SerialNumber, dateOfReceipt)
+        {
+            
+        }
+
         public override int CalculateRepairCost()
         {
             return 1;
