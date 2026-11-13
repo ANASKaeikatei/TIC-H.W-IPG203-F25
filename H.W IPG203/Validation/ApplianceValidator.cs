@@ -10,7 +10,7 @@ namespace H.W_IPG203
     {
         public static bool IsValidSerialNumber(string serialNumber)
         {
-            if (serialNumber != null) 
+            if (serialNumber != null && serialNumber != "") 
             {
                 return true;
             }

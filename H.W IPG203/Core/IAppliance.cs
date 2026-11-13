@@ -24,11 +24,11 @@ namespace H.W_IPG203
         private int _MaintenanceCost;
         private static int _DeicesUnderMaintenance = 0;
 
-        protected Appliance(string SerialNumber, DateTime date)
+        protected Appliance(string serialNumber, DateTime date)
         {
-            if (ApplianceValidator.IsValidSerialNumber(SerialNumber))
+            if (ApplianceValidator.IsValidSerialNumber(serialNumber))
             {
-                _SerialNumber = SerialNumber;
+                _SerialNumber = serialNumber;
             }
             else
             {
@@ -37,7 +37,7 @@ namespace H.W_IPG203
 
             if (ApplianceValidator.IsValidDate(date))
             {
-                _DateOfReceipt = date;
+                DateOfReceipt = date;
             }
             else
             {
@@ -66,7 +66,7 @@ namespace H.W_IPG203
             }
         }
 
-        bool IAppliance.CompleteMaintenance()
+        public bool CompleteMaintenance()
         {
             if (!_MaintenanceStatus)
             {
@@ -77,15 +77,15 @@ namespace H.W_IPG203
             return true;
         }
 
-        void IAppliance.DisplayInfo()
+        public virtual void DisplayInfo()
         {
             Console.WriteLine("Device Name: " + DeviceName);
             Console.WriteLine("Serial Number: " + SerialNumber);
             Console.WriteLine("Maintenance Status: " + MaintenanceStatus);
-            Console.WriteLine("Maintenance Cost: " + MaintenanceCost);
+            Console.WriteLine("Maintenance Cost: " + CalculateRepairCost());
         }
 
-        bool IAppliance.StartMaintenance()
+        public bool StartMaintenance()
         {
             if (_MaintenanceStatus)
             {
@@ -106,7 +106,7 @@ namespace H.W_IPG203
             get { return _DeviceName; }
             set
             {
-                if (_DeviceName == null)
+                if (_DeviceName == null && value != null)
                 {
                     _DeviceName = value;
                 }
